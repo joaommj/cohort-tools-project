@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "ExpressJS API for the Cohort Tools app",
   "main": "app.js",
-  "scripts": {
-    "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+"scripts": {
+  "dev": "nodemon app.js"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ironhack-labs/cohort-tools-project.git"
@@ -19,8 +18,11 @@
   "homepage": "https://github.com/ironhack-labs/cohort-tools-project#readme",
   "dependencies": {
     "cookie-parser": "^1.4.6",
-    "express": "^4.18.2",
-    "morgan": "^1.10.0",
-    "nodemon": "^3.0.1"
+    "express": "^4.21.2",
+    "morgan": "^1.10.0"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
