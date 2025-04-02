@@ -6,6 +6,7 @@ const PORT = 5005;
 const Cohort = require("./models/cohort.model");
 const students = require("./models/students.model");
 const mongoose = require("mongoose");
+const Students = require("./models/students.model");
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
@@ -46,9 +47,7 @@ app.get("/docs", (req, res) => {
 //   res.json(cohorts);
 // });
 
-app.get("/api/students", (req, res) => {
-  res.json(students);
-});
+//ROUTES FOR COHORTS
 
 app.get("/api/cohorts", (req, res) => {
   Cohort.find({})
@@ -62,6 +61,8 @@ app.get("/api/cohorts", (req, res) => {
     });
 });
 
+//ROUTES FOR STUDENTS
+
 app.get("/api/students", (req, res) => {
   Cohort.find({})
     .then((allStudents) => {
@@ -73,6 +74,47 @@ app.get("/api/students", (req, res) => {
       res.status(500).json({ error: "Failed to retrieve" });
     });
 });
+
+//CREATING NEW STUDEN---POST
+
+app.post("/api/students", (req,res)=> {
+
+Students.create(req.body)
+
+.then((newStudent) =>{
+
+  console.log("we got a new Student", newStudent);
+  res.status(201).json(newStudent);
+})
+
+.catch((err)=>{
+console.log(err)
+res.status(500).json({errorMessage: "We didnt create the new Student"});
+
+});
+})
+
+//GETTING ALL STUDENTS BY ID
+
+app.get("/api/students/cohort/:cohortId", (req, res)=>{
+
+const {cohortId}=req.params
+Students.find({cohort:cohortId})
+
+.then((filteredStudents)=>{
+
+console.log("here is the student by cohorts");
+res.status(200).json(filteredStudents)
+
+})
+.catch((err)=>{
+  console.log(err);
+  res.status(500).json({errorMessage: "Filtered students NOT FOUND"})
+}) 
+
+})
+
+
 
 // START SERVER
 app.listen(PORT, () => {
