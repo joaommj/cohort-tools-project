@@ -11,7 +11,7 @@ const studentsSchema = new Schema({
   phone: { type: String, required: true },
   linkedinUrl: { type: String, default: "" },
   languages: {
-    type: String,
+    type: [String],
     enum: [
       "English",
       "Spanish",
