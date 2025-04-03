@@ -75,7 +75,7 @@ app.get("/api/students", (req, res) => {
     });
 });
 
-//CREATING NEW STUDEN---POST
+//CREATING NEW STUDENT---POST
 
 app.post("/api/students", (req,res)=> {
 
@@ -89,12 +89,12 @@ Students.create(req.body)
 
 .catch((err)=>{
 console.log(err)
-res.status(500).json({errorMessage: "We didnt create the new Student"});
+res.status(500).json({errorMessage: "We didn't create the new Student"});
 
 });
 })
 
-//GETTING ALL STUDENTS BY ID
+//GETTING ALL STUDENTS BY COHORT ID
 
 app.get("/api/students/cohort/:cohortId", (req, res)=>{
 
@@ -114,6 +114,60 @@ res.status(200).json(filteredStudents)
 
 })
 
+// ROUTE TO GET A SINGLE STUDENT
+app.get ('/api/students/:studentId', (req,res) => {
+  const {studentId} = req.params;
+  Students.findById(studentId)
+  .then((oneStudent) =>{
+    console.log("One student:", oneStudent);
+    res.status(200).json(oneStudent);
+  })
+})
+
+
+//**************************************ROUTE TO UPDATE ONE STUDENT
+
+// app.put('/api/students/:studentId', (req, res)=>{
+//   const {studentId} = req.params;
+//   Students.findByIdAndUpdate(studentId, req.body, {new:true})
+//   .then((updatedStudent)=>{
+//     console.log("Updated student:", updatedStudent);
+//     res.status(200).json(updatedStudent);
+// })
+//   .catch((err) => {
+//     console.log(err);
+//     res.status(500).json({ errorMessage: "Failed to update student" });
+//   });
+// })
+
+
+app.patch("/api/students/:studentId", async (req, res) => {
+  try {
+    const updatedStudent = await Students.findByIdAndUpdate(
+      req.params.studentId,
+      req.body,
+      //with the update you need to say that you want the new info
+      { new: true }
+    );
+    console.log("here is the updated pet:", updatedStudent);
+    res.status(200).json(updatedStudent);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ errorMessage: "trouble updating Student" });
+  }
+});
+
+
+//**************************ROUTE TO DELETE STUDENT BY ID
+
+app.delete('/api/students/:studentId', (req,res)=>{
+  const {studentId} = req.params;
+  Students.findByIdAndDelete(studentId)
+  .then((deletedStudent)=>{
+    console.log("Deleted student:", deletedStudent);
+    res.status(204).json(deletedStudent)
+  })
+})
 
 
 // START SERVER
