@@ -7,6 +7,10 @@ const PORT = 5005;
 const Cohort = require("./models/cohort.model");
 const mongoose = require("mongoose");
 const Students = require("./models/students.model");
+const {
+  errorHandler,
+  notFoundHandler,
+} = require("./middlewares/error-handling");
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
@@ -74,26 +78,19 @@ app.post("/api/cohorts", (req, res) => {
     });
 });
 
-//GET Alfonso
-app.get("/api/cohorts/:cohortId", (req, res) => {
-  const { cohortId } = req.params;
-  Cohort.findById(cohortId).then((oneCohort) => {
-    console.log("One cohort:", oneCohort);
-    res.status(200).json(oneCohort);
-  });
-});
-//GET by ID Krists
+//GET Cohort by ID
 
-app.get("/api/cohorts/:cohortId", (req, res) => {
+app.get("/api/cohorts/:cohortId", (req, res, next) => {
   const { cohortId } = req.params;
+  console.log("Hello Error", cohortId);
   Cohort.findById(cohortId)
     .then((filteredCohort) => {
       console.log(`Here is ${cohortId} cohort!`);
       res.status(200).json(filteredCohort);
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).json({ errorMessage: `Cohort ${cohortId} not found!` });
+      next(err);
+      // res.status(500).json({ errorMessage: `Cohort ${cohortId} not found!` });
     });
 });
 
@@ -222,6 +219,10 @@ app.use("/auth", authRoutes);
 
 const userRoutes = require("./routes/user.routes");
 app.use("/user", userRoutes);
+
+// ERROR Handler
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 // START SERVER
 app.listen(PORT, () => {
