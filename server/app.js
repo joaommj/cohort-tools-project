@@ -218,6 +218,11 @@ app.delete("/api/students/:studentId", (req, res) => {
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
+// ************************* User Routes
+
+const userRoutes = require("./routes/user.routes");
+app.use("/user", userRoutes);
+
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
