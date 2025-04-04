@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
@@ -211,6 +212,11 @@ app.delete("/api/students/:studentId", (req, res) => {
     res.status(204).json(deletedStudent);
   });
 });
+
+// ***************************Auth Routes
+
+const authRoutes = require("./routes/auth.routes");
+app.use("/auth", authRoutes);
 
 // START SERVER
 app.listen(PORT, () => {
